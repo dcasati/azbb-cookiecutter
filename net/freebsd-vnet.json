@@ -1,0 +1,85 @@
+{
+    "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "VirtualNetwork",
+                    "settings": [
+                        {
+                            "name": "azure-vnet",
+                            "addressPrefixes": [
+                                "10.0.0.0/16"
+                            ],
+                            "subnets": [
+                                {
+                                    "name": "vpn",
+                                    "addressPrefix": "10.0.1.0/24"
+                                },
+                                {
+                                    "name": "mgmt",
+                                    "addressPrefix": "10.0.2.0/24"
+                                },
+                                {
+                                    "name": "application",
+                                    "addressPrefix": "10.0.3.0/24"
+                                }
+                            ],
+                            "tags": {
+                                "department": "DevOps",
+                                "managedBy": "Admins"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachine",
+                    "settings": {
+                        "vmCount": 1,
+                        "osType": "linux",
+                        "imageReference": {
+                            "publisher": "MicrosoftOSTC",
+                            "offer": "FreeBSD",
+                            "sku": "11.1",
+                            "version": "11.1.20180112"
+                        },
+                        "namePrefix": "jb",
+                        "adminUsername": "azureuser",
+                        "sshPublicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDmPfCw0DCXQpe3K3q4Udw4UC0XVQvXn1QlYzoQwRfkVZa5ZnJhYoFURl2koORTGgOQlyHuFcoMcHS2AjLFs1Vbx2z6ocnF3W//O1ycDjFksShryk3cxnKTC6YYFwwh/fLU2+tOVyOSegvHWGk8LXqWYOIp55RjK2y5KTqBU/mfiKC9SyqKnG7D4o/pZM69HuTcRBX7I0p8HQjgAI+1Flke/aNIRR/qfHdGLD2H9dlYe9UJ9gFvSpoeemz1L2U8LEF+gtLrBo8PomfJ4pk4Xthg5yvIgvR/cIZKwUvAm4rFqBHU1etoRlofWAD3keHuWVZB9ZWBKoSlPUzN0nxhbMTm4kiMfAA+6gk1TECaVLN/jppR5BmOnj+ZXrT3pjo6+aO6849ThDzY0Bv/uD4cbM3X7MrXl7tHrptiHb0y/CxdkZfqTI0q53ko3f0ao5fYR7bP1eAF7YVVlSqhTVkTDHlHNj/FCzWX/OIttpM/n9pGFRY5BvnpFmVjhWjO9SNjrbQ/zFj+evcGjvABp6B+aW9zkX6o+uIaQFpC3BL/GXaEw1sLL8pH5oyqCI5fZtXcuQJTc3bYkanlGuLHa4hkWOn45iBgeQzndvazVB5qMTWiefi6Po1RrUmgiTYpmmWy5feu5epM+Zw4YNAsJkCtzSOZ62kjCQK48zovxN7AwkHgXw== ssh key for the azureuser",
+                        "nics": [
+                            {
+                                "subnetName": "mgmt",
+                                "isPublic": true
+                            }
+                        ],
+                        "virtualNetwork": {
+                            "name": "azure-vnet"
+                        }
+                    }
+                },
+                {
+                    "type": "NetworkSecurityGroup",
+                    "settings": [
+                        {
+                            "name": "mgmt-nsg",
+                            "securityRules": [
+                                {
+                                    "name": "SSH"
+                                }
+                            ],
+                            "virtualNetworks": [
+                                {
+                                    "name": "azure-vnet",
+                                    "subnets": [
+                                        "mgmt"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
